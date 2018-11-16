@@ -49,8 +49,8 @@ const sketch = async ({ gl, canvasHeight, canvasWidth }) => {
     const { normals, vertices, uvs, indices } = new PlaneGeometry(
         900,
         500,
-        100,
-        100
+        150,
+        150
     );
 
     const drawImage = regl({
@@ -85,16 +85,22 @@ const sketch = async ({ gl, canvasHeight, canvasWidth }) => {
                 
                 
                 vec3 displacement = aPosition;
-                // displacement.z += cos(uTime * 100.);
-                if(dist < .02) {
+                
+                if(dist < .1) {
                     // displacement = mix(aPosition, displacement - scaledNormal, dist);
                     // displacement = vec3(sin(aPosition.y * 4.) + cos(aPosition.x * 3.) * sin(uTime * 10.));
                     
                 }
                 
-                displacement += scaledNormal * sin(aPosition.x * 1. * (uTime * 0.1)) * 0.5;
+                // displacement += scaledNormal * sin(aPosition.x * 1. * (uTime * 0.1)) * 0.5;
 
+                // https://catlikecoding.com/unity/tutorials/flow/waves/
+                float amplitude = 10.;
+                float waveLength = 100.;
+                float speed = 15.;
+                float k = 2. * M_PI / waveLength;
                 
+                displacement.y += amplitude * sin(k * (aPosition.x - speed * uTime));
                 
                 gl_Position = mv * vec4(displacement, 1.);
             }
@@ -137,15 +143,15 @@ const sketch = async ({ gl, canvasHeight, canvasWidth }) => {
                 );
                 
                 float distortion = sin(st.y * 100.) * t / 100.;
-                st.x += distortion;
-                st.y += distortion;
+                // st.x += distortion;
+                // st.y += distortion;
 
                 vec4 texel = texture2D(uTexture, vUv);
                 
                 float dist = distance(NDCMousePosition, st);
 
-                if(dist < .1) {
-                    // texel *= sin(uTime * 2.);
+                if(dist < .03) {
+                    texel *= sin(uTime * 2.);
                 }
                 // texel.r *= uTime;
                 gl_FragColor = texel;
@@ -241,7 +247,7 @@ const sketch = async ({ gl, canvasHeight, canvasWidth }) => {
         // Draw meshes to scene
 
         drawImage({
-            time: Math.sin(time),
+            time,
             mouse: {
                 x: window.mouseX || 0,
                 y: window.mouseY || 0
