@@ -1,0 +1,23 @@
+{
+    "name": "webgl-image",
+    "version": "1.0.0",
+    "description": "",
+    "main": "sketch.js",
+    "scripts": {
+        "start": "canvas-sketch src/index.js",
+        "export-temp": "canvas-sketch src/index.js --output=tmp/",
+        "export-gif": "canvas-sketch-gif tmp/ output.gif",
+        "build": "canvas-sketch --build src/index.js"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "canvas-sketch": "0.0.27",
+        "canvas-sketch-util": "^1.5.0",
+        "gl-mat4": "^1.2.0",
+        "glsl-noise": "^0.0.0",
+        "load-asset": "^1.2.0",
+        "regl": "^1.3.9"
+    }
+}
