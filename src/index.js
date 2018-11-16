@@ -44,13 +44,13 @@ function getNoMarginCanvasRelativeMousePosition(event, target) {
 const sketch = async ({ gl, canvasHeight, canvasWidth }) => {
     const regl = createRegl({ gl });
 
-    const image = await load("./texture.jpeg");
+    const image = await load("./texture4.jpeg");
 
     const { normals, vertices, uvs, indices } = new PlaneGeometry(
         900,
         500,
-        150,
-        150
+        200,
+        200
     );
 
     const drawImage = regl({
@@ -69,39 +69,59 @@ const sketch = async ({ gl, canvasHeight, canvasWidth }) => {
             uniform vec2 uMousePosition;
             uniform vec2 uTextureResolution;
 
-            #pragma glslify: _cnoise4 = require(glsl-noise/classic/4d)
+            // #pragma glslify: _cnoise4 = require(glsl-noise/classic/4d)
+
+            // https://catlikecoding.com/unity/tutorials/flow/waves/
+            vec3 gerstnerWave(vec4 wave, vec3 position, inout vec3 tangent, inout vec3 binormal) {
+                float steepNess = wave.z;
+                float waveLength = wave.w;
+
+                // Wave number
+                float k = 2. * M_PI / waveLength; 
+                float c = sqrt(9.8 / k);
+                float a = steepNess / k;
+                vec2 normalizedDir = normalize(vec2(wave.x, wave.y));
+                float f = k * (dot(normalizedDir, aPosition.xy) - c * uTime);           
+
+                tangent += normalize(
+                    vec3(
+                        1. - steepNess * sin(f), 
+                        steepNess * cos(f), 
+                        0.
+                    )
+                );
+
+                binormal += vec3(k * (aPosition.x - c * uTime));
+
+                return vec3(
+                    normalizedDir.x * (a * cos(f)),
+                    a * sin(f),
+                    normalizedDir.y * (a * cos(f))
+                );
+            }
 
             void main() {
-                vec3 scaledNormal = aNormal * 4.;
-                // Maybe divided by image size?
-                vec2 st = aPosition.xy / uResolution;
-                float r = _cnoise4(vec4(0.05 * aPosition + vec3(20.), vec3( 100. )));   
-                vec2 invertedMouse = uMousePosition * -1.;
-                
                 mat4 mv = uProjection * uView;
-                vUv = aUv;
-    
-                float dist = distance(invertedMouse, st);
+                vec3 scaledNormal = aNormal * 4.;
                 
+                // float r = _cnoise4(vec4(0.05 * aPosition + vec3(20.), vec3( 100. )));   
+                vec2 invertedMouse = uMousePosition * -1.;
+
+                vUv = aUv;
+
+                vec2 st = aPosition.xy / uResolution;
+                float dist = distance(invertedMouse, st);                
                 
                 vec3 displacement = aPosition;
-                
-                if(dist < .1) {
-                    // displacement = mix(aPosition, displacement - scaledNormal, dist);
-                    // displacement = vec3(sin(aPosition.y * 4.) + cos(aPosition.x * 3.) * sin(uTime * 10.));
-                    
-                }
-                
-                // displacement += scaledNormal * sin(aPosition.x * 1. * (uTime * 0.1)) * 0.5;
-
-                // https://catlikecoding.com/unity/tutorials/flow/waves/
-                float amplitude = 10.;
-                float waveLength = 100.;
-                float speed = 15.;
-                float k = 2. * M_PI / waveLength;
-                
-                displacement.y += amplitude * sin(k * (aPosition.x - speed * uTime));
-                
+                vec4 waveA = vec4(1., 1., .5, 100.);
+                vec4 waveB = vec4(0., 1., 0.95, 60.);
+                vec4 waveC = vec4(1., 1., 0.75, 70.);
+                vec3 normal = aNormal;
+                vec3 tangent = vec3(1., 0., 0.);
+                displacement += gerstnerWave(waveA, displacement, tangent, normal);
+                displacement += gerstnerWave(waveB, displacement, tangent, normal);
+                displacement += gerstnerWave(waveC, displacement, tangent, normal);
+            
                 gl_Position = mv * vec4(displacement, 1.);
             }
         `,
@@ -116,6 +136,7 @@ const sketch = async ({ gl, canvasHeight, canvasWidth }) => {
             uniform vec2 uTextureResolution;
 
             varying vec2 vUv;
+            
 
             float map(float value, float min1, float max1, float min2, float max2) {
                  return min2 + (value - min1) * (max2 - min2) / (max1 - min1);
