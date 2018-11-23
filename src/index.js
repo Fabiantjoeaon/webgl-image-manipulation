@@ -35,8 +35,7 @@ gui.add({ texture: currentTexture }, "texture", [
     "texture1.jpeg",
     "texture2.jpeg",
     "texture3.jpeg",
-    "vid1.mp4",
-    "vid2.mp4"
+    "vid1.mp4"
 ]).onChange(val => {
     window.location.href = replaceUrlParam(
         window.location.href,
