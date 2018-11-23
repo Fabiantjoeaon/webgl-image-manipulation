@@ -70,14 +70,14 @@ const manifest = isVideo
     ? {
           video: {
               type: "video",
-              src: `{{ site.baseurl }}/${currentTexture}`,
+              src: `/webgl-image-manipulation/${currentTexture}`,
               stream: true
           }
       }
     : {
           image: {
               type: "image",
-              src: `{{ site.baseurl }}/${currentTexture}`
+              src: `/webgl-image-manipulation/${currentTexture}`
           }
       };
 
