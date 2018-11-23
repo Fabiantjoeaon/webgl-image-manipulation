@@ -101,8 +101,8 @@ require("resl")({
             const { normals, vertices, uvs, indices } = new PlaneGeometry(
                 900,
                 500,
-                200,
-                200
+                100,
+                100
             );
 
             const drawImage = regl({
