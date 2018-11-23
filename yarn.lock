@@ -50,6 +50,11 @@ convert-length@^1.0.1:
   dependencies:
     defined "^1.0.0"
 
+dat.gui@^0.7.3:
+  version "0.7.3"
+  resolved "https://registry.yarnpkg.com/dat.gui/-/dat.gui-0.7.3.tgz#fae5317a8baf65b509242d1f59b5a31a49bbb1a7"
+  integrity sha512-VfVWUcuTwae6/MTia/s2aPB1NLZXA2Gz6PiVyYOrVfODbXJLNAkVjn0aiuxx08cR68ucOuwrNXXt0m9MNVJvkQ==
+
 dateformat@^3.0.3:
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/dateformat/-/dateformat-3.0.3.tgz#a6e37499a4d9a9cf85ef5872044d62901c9889ae"
@@ -193,6 +198,11 @@ repeat-string@^1.5.4:
   version "1.6.1"
   resolved "https://registry.yarnpkg.com/repeat-string/-/repeat-string-1.6.1.tgz#8dcae470e1c88abc2d600fff4a776286da75e637"
   integrity sha1-jcrkcOHIirwtYA//Sndihtp15jc=
+
+resl@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/resl/-/resl-1.0.3.tgz#2c7ca5682285bc519f7dcfb81fe6f3df0005e774"
+  integrity sha1-LHylaCKFvFGffc+4H+bz3wAF53Q=
 
 right-now@^1.0.0:
   version "1.0.0"
